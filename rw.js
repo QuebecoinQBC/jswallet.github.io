@@ -181,12 +181,8 @@ rush = window.rush = {
             var res = Bitcoin.base58.checkDecode(address);
             var version = res.version
             var payload = res.slice(0);
-            //if (version == 0 || version == 5 )
-            //    return true;
-			//return true;
-			// Check if push to privkkey, multisig doesn't work yet!:
-			if (address.charAt(0)=='M') 
-				return true;
+            if (version == 50 || version == 9 )
+                return true;
         }
         catch (err)
         {
