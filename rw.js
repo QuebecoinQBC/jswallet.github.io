@@ -42,8 +42,8 @@ rush = window.rush = {
         $("#generate").hide();
 
         //$("#address").html(this.address);
-        $("#address").html("<a href=\"http://insight-myr.cryptap.us/address/"+this.address+"\" target=\"_blank\">"+this.address+"</a>");
-        $("#explorerlink").html("<a href=\"http://insight-myr.cryptap.us/address/" + this.address + "\" target=\"_blank\">cryptap.us block explorer (new tab)</a>");
+        $("#address").html("<a href=\"https://blockbook.myralicious.com/address/"+this.address+"\" target=\"_blank\">"+this.address+"</a>");
+        $("#explorerlink").html("<a href=\"https://blockbook.myralicious.com/address/" + this.address + "\" target=\"_blank\">blockbook.myralicious.com block explorer (new tab)</a>");
 
         $(".qrimage").attr("src", "https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=myriadcoin%3A" + this.address + "&chld=H|0")
 
@@ -77,7 +77,7 @@ rush = window.rush = {
         }
 
         //url = "https://rushwallet.com/?z=" + ( Math.floor(Math.random() * 9999999) + 1 ) + "#" + rush.passcode + "&{CODE}";
-        url = "https://cryptap.us/myr/jswallet/?z=" + ( Math.floor(Math.random() * 9999999) + 1 ) + "#" + rush.passcode + "&{CODE}";
+        url = "./?z=" + ( Math.floor(Math.random() * 9999999) + 1 ) + "#" + rush.passcode + "&{CODE}";
         url2="zxing://scan/?ret=" + encodeURIComponent( url ) + "&SCAN_FORMATS=QR";
         //console.log( url);
         $("#qrlink").attr("href", url2);
@@ -288,6 +288,7 @@ rush = window.rush = {
     {
         //var url = "https://btc.blockr.io/api/v1/address/txs/" + this.address;
         var url = "https://cryptap.us/myr/insight/api/txs/?address=" + this.address;
+        //var url = "https://blockbook.myralicious.com/api/address/" + this.address;
 	var thisaddr = this.address;
 
         $("#txTable tbody").html("");
@@ -303,7 +304,7 @@ rush = window.rush = {
 
         }).done(function (msg)
         {
-		//console.log(msg);
+            console.log(msg);
             //if ( msg.data.txs.length > 0 )
             if ( msg.txs.length > 0 )
             {
@@ -352,7 +353,7 @@ rush = window.rush = {
                 confirms = msg.txs[i].confirmations;
                 if ( confirms == undefined ) { confirms = 0; }
 
-                $("#txTable tbody").append( '<tr><td>' + txTime + '</td><td class="hidden-sm hidden-xs"><a href="http://insight-myr.cryptap.us/tx/' + msg.txs[i].txid + '" target="_blank" >' + msg.txs[i].txid.substring(0,30) + '...</a></td><td class="hidden-sm hidden-xs">' + confirms + '</td><td>' + tot + '</td></tr>' );
+                $("#txTable tbody").append( '<tr><td>' + txTime + '</td><td class="hidden-sm hidden-xs"><a href="https://blockbook.myralicious.com/tx/' + msg.txs[i].txid + '" target="_blank" >' + msg.txs[i].txid.substring(0,30) + '...</a></td><td class="hidden-sm hidden-xs">' + confirms + '</td><td>' + tot + '</td></tr>' );
             }
 
             $("#txTable tbody tr td:nth-child(4)").each( function ( i ) 
@@ -484,10 +485,7 @@ rush = window.rush = {
 
     "getBalance": function ()
     {
-        //var url = "https://blockchain.info/q/addressbalance/" + this.address;
-        //var url = "https://cryptap.us/myr/insight/api/addr/" + this.address + "/balance";
-        //var url = "https://cryptap.us/myr/insight/api/addr/" + this.address;
-		var url = 'https://cryptap.us/myr/insight/api/addr/' + this.address + '/utxo';
+		var url = 'https://blockbook.myralicious.com/api/address/' + this.address;
 
         $.ajax(
         {
@@ -500,15 +498,7 @@ rush = window.rush = {
         }).done(function (msg)
         {
 			
-			var b = 0.0;
-			for (txindy in msg) {
-				tx = msg[txindy];
-				b += tx['amount'];
-			}
-			rush.balance = b;
-
-            //rush.balance = msg / 100000000;
-            //rush.balance = msg.balance + msg.unconfirmedBalance;
+            rush.balance = parseFloat(msg.balance) + parseFloat(msg.unconfirmedBalance);
             var spendable = rush.balance - rush.txFee;
 
             if (spendable < 0)

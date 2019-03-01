@@ -392,7 +392,7 @@ section.dark {
 padding-top:10px;
 padding-bottom:10px;
 /*background:url(../img/tiny_grid.png);*/
-background:url(/img/tiny_grid.png);
+background:url(./img/tiny_grid.png);
 background-repeat:repeat;
 }
 
