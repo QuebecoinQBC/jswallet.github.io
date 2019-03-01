@@ -2,6 +2,7 @@ rush = window.rush = {
 
     "passcode": "",
     "address": "",
+    "scriptPubKey": "",
     "explorerlink": "",
     "txSec": "",
     "balance": 0,
@@ -287,8 +288,8 @@ rush = window.rush = {
     "getHistory": function ()
     {
         //var url = "https://btc.blockr.io/api/v1/address/txs/" + this.address;
-        var url = "https://cryptap.us/myr/insight/api/txs/?address=" + this.address;
-        //var url = "https://blockbook.myralicious.com/api/address/" + this.address;
+        //var url = "https://cryptap.us/myr/insight/api/txs/?address=" + this.address;
+        var url = "https://blockbook.myralicious.com/api/address/" + this.address;
 	var thisaddr = this.address;
 
         $("#txTable tbody").html("");
@@ -304,6 +305,7 @@ rush = window.rush = {
 
         }).done(function (msg)
         {
+        /* TODO History: blockbook does not seem to have a way to get an array of historical transactions specific to an address.
             console.log(msg);
             //if ( msg.data.txs.length > 0 )
             if ( msg.txs.length > 0 )
@@ -316,6 +318,7 @@ rush = window.rush = {
             //for ( i=0;i<msg.data.txs.length;i++ )
             for ( i=0;i<msg.txs.length;i++ )
             {
+
                 //txTime = moment( msg.data.txs[i].time_utc ).format( "MMM D YYYY [<span class='time'>]h:mma[</span>]" );
                 txTime = moment( msg.txs[i].time*1000 ).format( "MMM D YYYY [<span class='time'>]h:mma[</span>]" );
                 if ( txTime == 'Invalid date' ) { txTime = 'unconfirmed'; }
@@ -373,9 +376,11 @@ rush = window.rush = {
 
 
             rush.getUnconfirmed();
+    // TODO History End  
+    */
         });
 
-    },  
+    },
     "setTxFee": function ( fee )
     {
         this.txFee = parseFloat( fee );
@@ -795,6 +800,8 @@ rush = window.rush = {
         var address = btcKey.getBitcoinAddress().toString();
 
         rush.address = address;
+        // get the scriptPubKey for crafting transactions:
+        rush.scriptPubKey = "76a914" + btcKey.getPubKeyHash().map(function(x) {return x.toString(16).padStart(2,"0");}).toString().replace(/,/g,'') + "88ac";
 
         $("#password").hide();
         $("#preparePassword").show();
