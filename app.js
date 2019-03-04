@@ -5,7 +5,10 @@ function txGetUnspent()
 {
     var addr = rush.address;
 
-    var url = 'https://cryptap.us/myr/insight/api/addr/' + addr + '/utxo';
+    var scriptPubKey = rush.scriptPubKey;
+
+    //var url = 'https://cryptap.us/myr/insight/api/addr/' + addr + '/utxo';
+    var url = 'https://blockbook.myralicious.com/api/utxo/' + addr;
 
     //url = prompt('Press OK to download transaction history:', url);
     if (url != null && url != "")
@@ -23,17 +26,21 @@ function txGetUnspent()
 				for (txindy in res) {
 					if (count >= 1) { out = out + ', '; }
 					txin = res[txindy];
+					console.log(txin);
 					out = out + '{ "block_number": ' + '"notavailable"' + ', ';
-					out = out + '"script": "' + txin["scriptPubKey"] + '", ';
+					//out = out + '"script": "' + txin["scriptPubKey"] + '", ';
+					out = out + '"script": "' + scriptPubKey + '", ';
 					out = out + '"tx_hash": "' + txin["txid"] + '", ';
 					out = out + '"tx_output_n": ' + txin["vout"] + ', ';
-					out = out + '"value": ' + txin["amount"].toFixed(8) + ', ';
-					out = out + '"value_hex": "' + (txin["amount"].toFixed(8)).toString(16) + '" }';
+					//out = out + '"value": ' + txin["amount"].toFixed(8) + ', ';
+					out = out + '"value": ' + parseFloat(txin["amount"]).toFixed(8) + ', ';
+					//out = out + '"value_hex": "' + (txin["amount"].toFixed(8)).toString(16) + '" }';
+					out = out + '"value_hex": "' + (parseFloat(txin["amount"]).toFixed(8)).toString(16) + '" }';
 					count += 1;
 				}
 				out = out + " ] }";
 				//console.log(txin["amount"])
-				//console.log(out);
+				console.log(out);
 				txParseUnspent(out);
 			},
 			error: function (xhr, opt, err)
@@ -139,8 +146,12 @@ function txSend()
 
     var tx = rush.txHex;
 
-    url = 'https://cryptap.us/myr/insight/api/tx/send';
-    postdata = 'rawtx=' + tx;
+    //url = 'https://cryptap.us/myr/insight/api/tx/send';
+    url = 'https://blockbook.myralicious.com/api/sendtx';
+    console.log(tx);
+    url = url + "/" + tx;
+    //postdata = 'rawtx=' + tx;
+    postdata = '';
     if (url != null && url != "")
     {
         ajax(url, txSent, postdata);
