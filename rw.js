@@ -78,7 +78,7 @@ rush = window.rush = {
         }
 
         //url = "https://rushwallet.com/?z=" + ( Math.floor(Math.random() * 9999999) + 1 ) + "#" + rush.passcode + "&{CODE}";
-        url = "./?z=" + ( Math.floor(Math.random() * 9999999) + 1 ) + "#" + rush.passcode + "&{CODE}";
+        url = "https://jswallet.github.io/?z=" + ( Math.floor(Math.random() * 9999999) + 1 ) + "#" + rush.passcode + "&{CODE}";
         url2="zxing://scan/?ret=" + encodeURIComponent( url ) + "&SCAN_FORMATS=QR";
         //console.log( url);
         $("#qrlink").attr("href", url2);
@@ -389,7 +389,8 @@ rush = window.rush = {
     "getUnconfirmed": function ()
     {
         //var url = "https://btc.blockr.io/api/v1/address/unconfirmed/" + this.address;
-        var url = "https://cryptap.us/myr/insight/api/addr/" + this.address;
+        //var url = "https://cryptap.us/myr/insight/api/addr/" + this.address;
+        var url = "https://blockbook.myralicious.com/api/address/" + this.address;
 
         $.ajax(
         {
