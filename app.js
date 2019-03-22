@@ -764,10 +764,10 @@ $(document).ready(function ()
     $(document).on("click", '#changeType', function (e)
     {
         //if ( $("#changeType .addonBox").html() != "฿" )
-        if ( $("#changeType .addonBox").html() != "XMY " )
+        if ( $("#changeType .addonBox").html() != "ᵯ" )
         {
             //$("#changeType .addonBox").html("฿");
-            $("#changeType .addonBox").html("XMY ");
+            $("#changeType .addonBox").html("ᵯ");
             rush.useFiat = false;
             rush.amountFiatValue();
             if ( !mobilecheck() )
@@ -786,10 +786,10 @@ $(document).ready(function ()
     $(document).on("click", '#changeType2', function (e)
     {
         //if ( $("#changeType2 .addonBox2").html() != "฿" )
-        if ( $("#changeType2 .addonBox2").html() != "XMY " )
+        if ( $("#changeType2 .addonBox2").html() != "ᵯ" )
         {
             //$("#changeType2 .addonBox2").html("฿");
-            $("#changeType2 .addonBox2").html("XMY ");
+            $("#changeType2 .addonBox2").html("ᵯ");
             rush.useFiat2 = false;
             rush.amountFiatValue2();
             if ( !mobilecheck() )

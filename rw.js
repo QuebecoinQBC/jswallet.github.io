@@ -155,7 +155,7 @@ rush = window.rush = {
         if (total > this.balance)
         {
             //setMsg("You need to leave enough room for the " + this.txFee + " btc miner fee");
-            setMsg("You need to leave enough room for the " + this.txFee + " XMY miner fee");
+            setMsg("You need to leave enough room for the " + this.txFee + " &#x1d6f; miner fee");
             return false;
         }
 
@@ -512,7 +512,7 @@ rush = window.rush = {
 
             $("#btcBalance").html( btcFormat( rush.balance ) );
             //$("#spendable").html("฿" + btcFormat( spendable ) );
-            $("#spendable").html("XMY " + btcFormat( spendable ) );
+            $("#spendable").html("&#x1d6f; " + btcFormat( spendable ) );
 
             rush.getFiatPrice();
 
@@ -612,7 +612,7 @@ rush = window.rush = {
             price = price.toFixed(2);
             tprice = tprice.toFixed(2);
 
-            $("#price").html(rush.getFiatPrefix()+formatMoney(tprice) + " / 1kXMY").show();
+            $("#price").html(rush.getFiatPrefix()+formatMoney(tprice) + " / 1k&#x1d6f;").show();
 
             $("#currencyValue").html( rush.currency );
 
@@ -640,7 +640,7 @@ rush = window.rush = {
             var btcValue = amount / this.price;
             btcValue = btcFormat( btcValue );
             //$("#fiatPrice").html("(฿" + btcValue + ")");
-            $("#fiatPrice").html("(XMY " + btcValue + ")");
+            $("#fiatPrice").html("(&#x1d6f; " + btcValue + ")");
 
         }
         else
@@ -671,7 +671,7 @@ rush = window.rush = {
             var btcValue = amount / this.price;
             btcValue = btcFormat( btcValue );
             //$("#fiatPrice2").html("(฿" + btcValue + ")");
-            $("#fiatPrice2").html("(XMY " + btcValue + ")");
+            $("#fiatPrice2").html("(&#x1d6f; " + btcValue + ")");
 
         }
         else
