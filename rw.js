@@ -596,7 +596,7 @@ rush = window.rush = {
         $.ajax({
             type: "GET",
             //url: "https://rushwallet.com/ticker2.php",
-            url: "https://cryptap.us/myr/jswallet/ticker.php",
+            url: "https://cryptap.us/myr/ticker.php",
             async: true,
             data: {},
             dataType: "json"
