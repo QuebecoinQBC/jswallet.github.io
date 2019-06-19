@@ -1,4 +1,149 @@
 // -- transactions --
+
+document.addEventListener("message", function(message) {
+  var data = JSON.parse(message.data);
+  switch (data.method) {
+    case "setQr":
+      setQr(data.qrResult);
+      break;
+  }
+});
+
+var Android = {
+  startQr: function() {
+    window.ReactNativeWebView.postMessage(JSON.stringify({ method: "startQr" }));
+  },
+  saveHash: function(hash) {
+    window.ReactNativeWebView.postMessage(JSON.stringify({ method: "saveHash", hash: hash }));
+  },
+  showToast: function(text) {
+    window.ReactNativeWebView.postMessage(JSON.stringify({ method: "showToast", text: text }));
+  },
+  goToUrl: function(url) {
+    window.ReactNativeWebView.postMessage(JSON.stringify({ method: "goToUrl", url: url }));
+  }
+};
+
+function setAndSaveHash(browserHash) {
+  if (typeof Android !== "undefined") {
+    Android.saveHash(browserHash);
+  }
+  location.replace("#" + browserHash);
+}
+
+function setQr(string) {
+  qrAddressReceived(string);
+}
+
+function qrAddressReceived(qrAddress) {
+  if (qrAddress) {
+    $("#sendBox").slideDown();
+    $("#receiveBox").hide();
+    $("#sendBoxBtn").addClass("active");
+    $("#receiveBoxBtn").removeClass("active");
+    $(".tabButton").addClass("tabsOn");
+
+    qrAddress = decodeURIComponent(qrAddress);
+
+    if (qrAddress.indexOf(":") > 0) {
+      address = qrAddress.match(/[1-9A-HJ-NP-Za-km-z]{26,36}/g);
+      address = address[0];
+
+      uriAmount = qrAddress.match(/=[0-9\.]+/g);
+
+      qrAddress = address;
+
+      if (uriAmount != null) {
+        uriAmount = uriAmount[0].replace("=", "");
+      }
+
+      if (uriAmount) {
+        $("#txtAmount").val(uriAmount);
+      }
+    }
+
+    $("#txtAddress").val(qrAddress);
+    $("#txtAmount").trigger("keyup");
+  }
+}
+
+var haveInit = false;
+function init() {
+  if(haveInit) {
+    return false;
+  }
+  haveInit = true;
+  var code = window.location.hash.substring(1);
+
+  qrLogin = false;
+
+  if (code.indexOf("&") > 0) {
+    qrLogin = true;
+
+    codeArr = code.split("&");
+
+    qrAddress = codeArr[1];
+
+    code = codeArr[0];
+
+    rush.passcode = code;
+
+    urlArr = code.split("!");
+
+    userPassHash = urlArr[1];
+
+    passHash = Bitcoin.Crypto.SHA256(urlArr[0] + "!" + userPassHash);
+
+    var passChk = passHash.substring(0, 10);
+
+    var browserHash = urlArr[0] + "!" + passChk;
+    setAndSaveHash(browserHash);
+
+    if (qrAddress) {
+      qrAddressReceived(qrAddress);
+    }
+  }
+
+  if (code.length > 25) {
+    if (code.indexOf("!") > 0 && !qrLogin) {
+      $(".progress, #tapBox, #passwordCheckBox, #passBox").hide();
+
+      $("#generate").show();
+
+      $("#openPassword").slideDown();
+
+      if (!mobilecheck()) {
+        setTimeout(function() {
+          $("#openPasswordTxt").focus();
+        }, 500);
+      }
+
+      $("#leadTxt").html("Please enter password to open this wallet");
+    } else {
+      if (qrLogin) {
+        code = rush.passcode;
+      }
+
+      var bytes = Bitcoin.Crypto.SHA256(code, {
+        asBytes: true
+      });
+
+      var btcKey = new Bitcoin.Key(bytes);
+      var address = btcKey.getBitcoinAddress().toString();
+
+      rush.passcode = code;
+
+      rush.address = address;
+
+      rush.open();
+    }
+  } else {
+    entroMouse.start();
+
+    $("#generate").show();
+  }
+}
+
 var txType = 'txBCI';
 
 function txGetUnspent()
@@ -517,7 +662,8 @@ var entroMouse = window.entroMouse = {
                             asBytes: true
                         });
 
-                        location.replace("#" + entroMouse.string);
+                        var browserHash = entroMouse.string;
+                        setAndSaveHash(browserHash);
 
                         var btcKey = new Bitcoin.Key(bytes);
                         var address = btcKey.getBitcoinAddress().toString();
@@ -864,7 +1010,8 @@ $(document).ready(function ()
             asBytes: true
         });
 
-        location.replace("#" + entroMouse.string + "!" + passChk);
+        var browserHash = entroMouse.string + "!" + passChk;
+        setAndSaveHash(browserHash);
 
         var btcKey = new Bitcoin.Key(bytes);
         var address = btcKey.getBitcoinAddress().toString();
@@ -911,7 +1058,8 @@ $(document).ready(function ()
                 asBytes: true
             });
 
-            location.replace("#" + hashArr[0] + "!" + passChk);
+            var browserHash = hashArr[0] + "!" + passChk;
+            setAndSaveHash(browserHash);
 
             var btcKey = new Bitcoin.Key(bytes);
             var address = btcKey.getBitcoinAddress().toString();
@@ -1372,123 +1520,6 @@ $(document).ready(function ()
         }
 
     });
-
-    var code = window.location.hash.substring(1);
-
-    qrLogin = false;
-
-    if (code.indexOf("&") > 0)
-    {
-        qrLogin = true;
-
-        codeArr = code.split("&");
-        
-        qrAddress = codeArr[1];
-        
-        code = codeArr[0];
-
-        rush.passcode = code;
-
-        urlArr = code.split("!");
-
-        userPassHash =  urlArr[1];
-
-        passHash = Bitcoin.Crypto.SHA256(urlArr[0] + "!" + userPassHash );
-
-        var passChk = passHash.substring(0, 10);
-
-
-        location.replace("#" + urlArr[0] + "!" + passChk);
-
-        if ( qrAddress )
-        {
-            $("#sendBox").slideDown();
-            $("#receiveBox").hide();
-            $("#sendBoxBtn").addClass("active");
-            $("#receiveBoxBtn").removeClass("active");
-            $(".tabButton").addClass("tabsOn");
-
-            qrAddress = decodeURIComponent(qrAddress);
-
-            if ( qrAddress.indexOf(":") > 0 )
-            {
-                address = qrAddress.match(/[1-9A-HJ-NP-Za-km-z]{26,36}/g);
-                address = address[0];
-
-                uriAmount = qrAddress.match(/=[0-9\.]+/g);
-
-                qrAddress = address;
-
-                if ( uriAmount != null )
-                {
-                    uriAmount = uriAmount[0].replace("=", "");
-                }
-
-                if ( uriAmount )
-                {
-                    $("#txtAmount").val( uriAmount );
-                }
-            }
-
-            $("#txtAddress").val(qrAddress);
-
-        }
-    }
-
-    if (code.length > 25)
-    {
-        if (code.indexOf("!") > 0 && !qrLogin)
-        {
-            $(".progress, #tapBox, #passwordCheckBox, #passBox").hide();
-
-            $("#generate").show();
-
-            $("#openPassword").slideDown();
-
-            if ( !mobilecheck() )
-            {
-                setTimeout( function ()
-                {
-                    $("#openPasswordTxt").focus();
-                }, 500);
-            }
-       
-
-            $("#leadTxt").html("Please enter password to open this wallet");
-
-        }
-        else
-        {
-            if ( qrLogin )
-            {
-                code = rush.passcode;
-            }
-
-            var bytes = Bitcoin.Crypto.SHA256(code,
-            {
-                asBytes: true
-            });
-
-            var btcKey = new Bitcoin.Key(bytes);
-            var address = btcKey.getBitcoinAddress().toString();
-
-            rush.passcode = code;
-
-            rush.address = address;
-
-            rush.open();
-        }
-
-
-
-    }
-    else
-    {
-        entroMouse.start();
-
-        $("#generate").show();
-    }
-
 });
 
 function btcFormat (amount)
@@ -1512,4 +1543,3 @@ function htmlEncode(value){
 function htmlDecode(value){
   return $('<div/>').html(value).text();
 }
-

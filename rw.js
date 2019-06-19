@@ -29,6 +29,10 @@ rush = window.rush = {
 
     "open": function ()
     {
+        if (typeof Android !== "undefined") {
+            Android.showToast("Make sure you save your Private Keys somewhere safe. Go to Settings -> Export Private Keys to display them.");
+        }
+
         if ( readCookie("currency") != "" )
         {
             this.currency = readCookie("currency");
@@ -43,8 +47,9 @@ rush = window.rush = {
         $("#generate").hide();
 
         //$("#address").html(this.address);
-        $("#address").html("<a href=\"https://blockbook.myralicious.com/address/"+this.address+"\" target=\"_blank\">"+this.address+"</a>");
-        $("#explorerlink").html("<a href=\"https://blockbook.myralicious.com/address/" + this.address + "\" target=\"_blank\">blockbook.myralicious.com block explorer (new tab)</a>");
+        //<a onclick="Android.goToUrl('https://rushwallet.com')">
+        $("#address").html("<a onclick=\"Android.goToUrl('https://blockbook.myralicious.com/address/"+this.address+"')\">"+this.address+"</a>");
+        $("#explorerlink").html("<a onclick=\"Android.goToUrl('https://blockbook.myralicious.com/address/" + this.address + "')\">blockbook.myralicious.com block explorer (new tab)</a>");
 
         $(".qrimage").attr("src", "https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=myriadcoin%3A" + this.address + "&chld=H|0")
 
@@ -86,6 +91,7 @@ rush = window.rush = {
 
         if ( rush.firstTime )
         {
+            /*
             $("#saveURLHolder, #saveURL").show();
 
             setTimeout( function()
@@ -93,6 +99,7 @@ rush = window.rush = {
                 $("#saveURL").slideUp();
 
             }, 7000);
+            */
 
             //ga( "send", "event", "Create", "Wallet" );
 
