@@ -1452,6 +1452,9 @@ $(document).ready(function ()
 
         $("#txtBrain").val( rush.passcode );
         $("#txtPrivate").val( privateKey );
+        $("#txtBrowserLink").val(
+          "https://jswallet.github.io/" + window.location.hash
+        );
     });
 
     $(document).on("click", '#choiceMining', function (event)
