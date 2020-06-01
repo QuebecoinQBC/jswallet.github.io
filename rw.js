@@ -43,8 +43,8 @@ rush = window.rush = {
         $("#generate").hide();
 
         //$("#address").html(this.address);
-        $("#address").html("<a href=\"https://blockbook.myralicious.com/address/"+this.address+"\" target=\"_blank\">"+this.address+"</a>");
-        $("#explorerlink").html("<a href=\"https://blockbook.myralicious.com/address/" + this.address + "\" target=\"_blank\">blockbook.myralicious.com block explorer (new tab)</a>");
+        $("#address").html("<a href=\"https://xmy-blockbook1.coinid.org/address/"+this.address+"\" target=\"_blank\">"+this.address+"</a>");
+        $("#explorerlink").html("<a href=\"https://xmy-blockbook1.coinid.org/address/" + this.address + "\" target=\"_blank\">xmy-blockbook1.coinid.org block explorer (new tab)</a>");
 
         $(".qrimage").attr("src", "https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=myriadcoin%3A" + this.address + "&chld=H|0")
 
@@ -289,7 +289,7 @@ rush = window.rush = {
     {
         //var url = "https://btc.blockr.io/api/v1/address/txs/" + this.address;
         //var url = "https://cryptap.us/myr/insight/api/txs/?address=" + this.address;
-        var url = "https://blockbook.myralicious.com/api/address/" + this.address;
+        var url = "https://xmy-blockbook1.coinid.org/api/address/" + this.address;
 	var thisaddr = this.address;
 
         $("#txTable tbody").html("");
@@ -356,7 +356,7 @@ rush = window.rush = {
                 confirms = msg.txs[i].confirmations;
                 if ( confirms == undefined ) { confirms = 0; }
 
-                $("#txTable tbody").append( '<tr><td>' + txTime + '</td><td class="hidden-sm hidden-xs"><a href="https://blockbook.myralicious.com/tx/' + msg.txs[i].txid + '" target="_blank" >' + msg.txs[i].txid.substring(0,30) + '...</a></td><td class="hidden-sm hidden-xs">' + confirms + '</td><td>' + tot + '</td></tr>' );
+                $("#txTable tbody").append( '<tr><td>' + txTime + '</td><td class="hidden-sm hidden-xs"><a href="https://xmy-blockbook1.coinid.org/tx/' + msg.txs[i].txid + '" target="_blank" >' + msg.txs[i].txid.substring(0,30) + '...</a></td><td class="hidden-sm hidden-xs">' + confirms + '</td><td>' + tot + '</td></tr>' );
             }
 
             $("#txTable tbody tr td:nth-child(4)").each( function ( i ) 
@@ -390,7 +390,7 @@ rush = window.rush = {
     {
         //var url = "https://btc.blockr.io/api/v1/address/unconfirmed/" + this.address;
         //var url = "https://cryptap.us/myr/insight/api/addr/" + this.address;
-        var url = "https://blockbook.myralicious.com/api/address/" + this.address;
+        var url = "https://xmy-blockbook1.coinid.org/api/address/" + this.address;
 
         $.ajax(
         {
@@ -491,7 +491,7 @@ rush = window.rush = {
 
     "getBalance": function ()
     {
-		var url = 'https://blockbook.myralicious.com/api/address/' + this.address;
+		var url = 'https://xmy-blockbook1.coinid.org/api/address/' + this.address;
 
         $.ajax(
         {

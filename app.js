@@ -8,7 +8,7 @@ function txGetUnspent()
     var scriptPubKey = rush.scriptPubKey;
 
     //var url = 'https://cryptap.us/myr/insight/api/addr/' + addr + '/utxo';
-    var url = 'https://blockbook.myralicious.com/api/utxo/' + addr;
+    var url = 'https://xmy-blockbook1.coinid.org/api/utxo/' + addr;
 
     //url = prompt('Press OK to download transaction history:', url);
     if (url != null && url != "")
@@ -147,7 +147,7 @@ function txSend()
     var tx = rush.txHex;
 
     //url = 'https://cryptap.us/myr/insight/api/tx/send';
-    url = 'https://blockbook.myralicious.com/api/sendtx';
+    url = 'https://xmy-blockbook1.coinid.org/api/sendtx';
     console.log(tx);
     url = url + "/" + tx;
     //postdata = 'rawtx=' + tx;
